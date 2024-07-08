@@ -12,6 +12,8 @@ import Settings from './pages/Settings';
 import DefaultLayout from './layout/DefaultLayout';
 import LandingPage from './pages/LandingPage';
 import AuthPage from './pages/Authentication/AuthPage';
+import Events from './pages/Events/Events';
+import Gifts from './pages/Gifts';
 
 const API_BASE_URL = "http://localhost:8000/";
 
@@ -61,11 +63,29 @@ function App() {
           }
         />
         <Route
+          path="/events"
+          element={
+            <>
+              <PageTitle title="Events | EventSync-Your Gateway to Seamless Event Management" />
+              <Events />
+            </>
+          }
+        />
+        <Route
           path="/calendar"
           element={
             <>
               <PageTitle title="Calendar | EventSync-Your Gateway to Seamless Event Management" />
               <Calendar />
+            </>
+          }
+        />
+        <Route
+          path="/gifts"
+          element={
+            <>
+              <PageTitle title="Gifts | EventSync-Your Gateway to Seamless Event Management" />
+              <Gifts />
             </>
           }
         />

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ClickOutside from '../ClickOutside';
-import UserOne from '../../images/user/user-01.png';
+import UserDP from '../../images/user/default-male.svg';
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -21,7 +21,7 @@ const DropdownUser = () => {
         </span>
 
         <span className="h-12 w-12 rounded-full">
-          <img src={UserOne} alt="User" />
+          <img src={UserDP} alt="User" className='dark:bg-zinc-800 rounded-full' />
         </span>
 
         <svg
@@ -72,7 +72,7 @@ const DropdownUser = () => {
                 My Profile
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link
                 to="#"
                 className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
@@ -92,8 +92,8 @@ const DropdownUser = () => {
                 </svg>
                 My Contacts
               </Link>
-            </li>
-            <li>
+            </li> */}
+            {/* <li>
               <Link
                 to="/settings"
                 className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
@@ -117,7 +117,7 @@ const DropdownUser = () => {
                 </svg>
                 Account Settings
               </Link>
-            </li>
+            </li> */}
           </ul>
           <button className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
             <svg

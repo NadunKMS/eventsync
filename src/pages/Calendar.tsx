@@ -1,11 +1,25 @@
+import React, { useState, useEffect } from 'react';
 import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
 
 const Calendar = () => {
+  const [currentMonth, setCurrentMonth] = useState('');
+
+  useEffect(() => {
+    const getCurrentMonth = () => {
+      const months = ['January', 'February', 'March', 'April', 'May', 'June',
+                      'July', 'August', 'September', 'October', 'November', 'December'];
+      const currentDate = new Date();
+      return months[currentDate.getMonth()];
+    };
+    setCurrentMonth(getCurrentMonth());
+  }, []); 
+
   return (
     <>
       <Breadcrumb pageName="Calendar" />
 
       {/* <!-- ====== Calendar Section Start ====== --> */}
+      <h2>Explore events in {currentMonth}</h2> <br />
       <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <table className="w-full">
           <thead>
