@@ -1,11 +1,15 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-import { Button, Navbar } from 'react-daisyui'
-import { Link } from 'react-router-dom';
+import { Button, Hero, Navbar } from 'react-daisyui'
+import { Link, Routes, Route, Router } from 'react-router-dom';
+import SignIn from './Authentication/SignIn';
+import SignUp from './Authentication/SignUp';
+import LandingHero from '../components/Landing/LandingHero';
+import PageTitle from '../components/PageTitle';
 
 function LandingPage() {
   useGSAP(() => {
-    gsap.fromTo(".Navbar", {
+    gsap.fromTo("#navbar", {
       y: -10,
       opacity: 0,
     }, {
@@ -29,34 +33,33 @@ function LandingPage() {
   
   return (
     <>
-    <Navbar>
+    <Navbar id='navbar'>
     <Navbar.Start>
-      <a className="btn btn-ghost normal-case text-xl">EventSync</a>
+      <Link to={"/"} className="btn btn-ghost normal-case text-xl">EventSync</Link>
     </Navbar.Start>
     <Navbar.Center className="hidden lg:flex">
     </Navbar.Center>
     <Navbar.End className='space-x-3'>
-      <Button color='primary' className='text-white' tag="a">Login</Button>
-      <Button color='primary' className='hover:text-white' variant='outline' tag="a">Sign Up</Button>
+      <Link to={"auth/signin"}><Button color='primary' className='text-white' tag="a">Login</Button></Link>
+      <Link to={"auth/signup"}><Button color='primary' className='hover:text-white' variant='outline' tag="a">Sign Up</Button></Link>
     </Navbar.End>
   </Navbar>
 
     <section>
-      <div className="hero bg-base-200 min-h-screen">
-      <div className="hero-content text-center">
-        <div className="max-w-md">
-          <h1 className="text-5xl font-bold">Revolutionize Your Campus  Events with EventSync</h1>
-          <p className="py-6">
-          <b>EventSync</b> your all-in-one event management platform  designed specifically for your university.<br/>
-          Easily organize, promote, and manage campus events with   seamless integration and user-friendly features.<br/>
-          From club meetings to large-scale conferences, EventSync  ensures your events are a resounding success.<br/>
-          Join the EventSync community and transform the way you  experience university life.
-          </p>
-          <Link to="auth">
-          <button className="btn btn-primary">Get Started</button></Link>
-        </div>
-      </div>
-      </div>
+      <Routes>
+        <Route index element={<LandingHero/>} />
+        <Route path="/auth/signin" element={
+          <>
+          <PageTitle title="Login | EventSync-Your Gateway to Seamless Event Management" />
+          <SignIn />
+          </>
+          } />
+        <Route path="/auth/signup" element={
+          <>
+          <PageTitle title="Register | EventSync-Your Gateway to Seamless Event Management" />
+          <SignUp />
+          </>} />
+      </Routes>
     </section>
   </>
   )

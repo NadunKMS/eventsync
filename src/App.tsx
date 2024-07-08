@@ -11,7 +11,6 @@ import Explore from './pages/Dashboard/Explore';
 import Settings from './pages/Settings';
 import DefaultLayout from './layout/DefaultLayout';
 import LandingPage from './pages/LandingPage';
-import AuthPage from './pages/Authentication/AuthPage';
 import Events from './pages/Events/Events';
 import Gifts from './pages/Gifts';
 
@@ -49,8 +48,6 @@ function App() {
   }
 
   return logStatus ? (
-    <LandingPage />
-  ) : (
     <DefaultLayout>
       <Routes>
         <Route
@@ -98,35 +95,10 @@ function App() {
             </>
           }
         />
-        <Route
-          path="/auth/signin"
-          element={
-            <>
-              <PageTitle title="Signin | EventSync-Your Gateway to Seamless Event Management" />
-              <SignIn />
-            </>
-          }
-        />
-        <Route
-          path="/auth/signup"
-          element={
-            <>
-              <PageTitle title="Signup | EventSync-Your Gateway to Seamless Event Management" />
-              <SignUp />
-            </>
-          }
-        />
-        <Route
-          path="/auth"
-          element={
-            <>
-              <PageTitle title="Count you in | EventSync-Your Gateway to Seamless Event Management" />
-              <AuthPage />
-            </>
-          }
-        />
       </Routes>
     </DefaultLayout>
+  ) : (
+    <LandingPage />
   );
 }
 
