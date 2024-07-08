@@ -1,24 +1,23 @@
 import { useEffect, useState } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 import Loader from './common/Loader';
 import PageTitle from './components/PageTitle';
 import SignIn from './pages/Authentication/SignIn';
 import SignUp from './pages/Authentication/SignUp';
 import Calendar from './pages/Calendar';
-import Chart from './pages/Chart';
-import ECommerce from './pages/Dashboard/ECommerce';
-import FormElements from './pages/Form/FormElements';
-import FormLayout from './pages/Form/FormLayout';
-import Profile from './pages/Profile';
+import Explore from './pages/Dashboard/Explore';
 import Settings from './pages/Settings';
-import Tables from './pages/Tables';
-import Alerts from './pages/UiElements/Alerts';
-import Buttons from './pages/UiElements/Buttons';
 import DefaultLayout from './layout/DefaultLayout';
+import LandingPage from './pages/LandingPage';
+import AuthPage from './pages/Authentication/AuthPage';
+
+const API_BASE_URL = "http://localhost:8000/";
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
+  const [logStatus, setLogStatus] = useState(false)
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -29,8 +28,26 @@ function App() {
     setTimeout(() => setLoading(false), 1000);
   }, []);
 
-  return loading ? (
-    <Loader />
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}Model/UserSession.php`);
+        setLogStatus(response.data.loggedin);
+      } catch (error) {
+        console.error('Error checking login status:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    checkLoginStatus();
+  }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
+
+  return logStatus ? (
+    <LandingPage />
   ) : (
     <DefaultLayout>
       <Routes>
@@ -38,8 +55,8 @@ function App() {
           index
           element={
             <>
-              <PageTitle title="eCommerce Dashboard | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-              <ECommerce />
+              <PageTitle title="Explore Events | EventSync-Your Gateway to Seamless Event Management" />
+              <Explore />
             </>
           }
         />
@@ -47,44 +64,8 @@ function App() {
           path="/calendar"
           element={
             <>
-              <PageTitle title="Calendar | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <PageTitle title="Calendar | EventSync-Your Gateway to Seamless Event Management" />
               <Calendar />
-            </>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <>
-              <PageTitle title="Profile | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-              <Profile />
-            </>
-          }
-        />
-        <Route
-          path="/forms/form-elements"
-          element={
-            <>
-              <PageTitle title="Form Elements | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-              <FormElements />
-            </>
-          }
-        />
-        <Route
-          path="/forms/form-layout"
-          element={
-            <>
-              <PageTitle title="Form Layout | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-              <FormLayout />
-            </>
-          }
-        />
-        <Route
-          path="/tables"
-          element={
-            <>
-              <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-              <Tables />
             </>
           }
         />
@@ -92,35 +73,8 @@ function App() {
           path="/settings"
           element={
             <>
-              <PageTitle title="Settings | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <PageTitle title="Settings | EventSync-Your Gateway to Seamless Event Management" />
               <Settings />
-            </>
-          }
-        />
-        <Route
-          path="/chart"
-          element={
-            <>
-              <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-              <Chart />
-            </>
-          }
-        />
-        <Route
-          path="/ui/alerts"
-          element={
-            <>
-              <PageTitle title="Alerts | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-              <Alerts />
-            </>
-          }
-        />
-        <Route
-          path="/ui/buttons"
-          element={
-            <>
-              <PageTitle title="Buttons | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-              <Buttons />
             </>
           }
         />
@@ -128,7 +82,7 @@ function App() {
           path="/auth/signin"
           element={
             <>
-              <PageTitle title="Signin | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <PageTitle title="Signin | EventSync-Your Gateway to Seamless Event Management" />
               <SignIn />
             </>
           }
@@ -137,8 +91,17 @@ function App() {
           path="/auth/signup"
           element={
             <>
-              <PageTitle title="Signup | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <PageTitle title="Signup | EventSync-Your Gateway to Seamless Event Management" />
               <SignUp />
+            </>
+          }
+        />
+        <Route
+          path="/auth"
+          element={
+            <>
+              <PageTitle title="Count you in | EventSync-Your Gateway to Seamless Event Management" />
+              <AuthPage />
             </>
           }
         />
