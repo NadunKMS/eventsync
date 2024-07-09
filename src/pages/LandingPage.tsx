@@ -30,12 +30,12 @@ function LandingPage() {
     <Navbar.Center className="hidden lg:flex">
     </Navbar.Center>
     <Navbar.End className='space-x-3'>
-      <Link to={"auth/signin"}><Button color='primary' className='text-white' tag="a">Login</Button></Link>
-      <Link to={"auth/signup"}><Button color='primary' className='hover:text-white' variant='outline' tag="a">Sign Up</Button></Link>
+      <Link to={"auth/signin"}><Button color='primary' className='text-white'>Login</Button></Link>
+      <Link to={"auth/signup"}><Button color='primary' className='hover:text-white' variant='outline'>Sign Up</Button></Link>
     </Navbar.End>
   </Navbar>
 
-    <section>
+    <section className='hero'>
       <Routes>
         <Route index element={<LandingHero/>} />
         <Route path="/auth/signin" element={

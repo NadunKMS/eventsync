@@ -6,7 +6,7 @@ function LandingHero() {
   return (
     <>
     <section>
-    <div className="hero bg-slate-50 min-h-screen">
+    <div className="hero min-h-screen">
             <div className="hero-content text-center">
               <div className="max-w-md">
                 <h1 className="text-5xl font-bold text-primary">Revolutionize Your Campus Events with EventSync</h1>

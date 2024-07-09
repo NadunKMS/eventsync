@@ -4,10 +4,18 @@ import SignUpImage from '../../images/vector/signup.svg';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import axios from 'axios';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+const lkMobile = /^(?:0|94)?(7[0-9]{8})$/;
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
-  email: z.string().email({ message: "Invalid email address" }),
+  email: z.string()
+          .email({ message: "Invalid email address" })
+          .refine((email) => email.endsWith("@sab.ac.lk"),{message: "Invalid organization email. Only @sab.ac.lk emails are allowed"}),
+  mobile: z.string().regex(lkMobile, { message: "Invalid mobile number" }),
   password: z.string().min(6, { message: "Password must be at least 6 characters long" }),
   faculty: z.enum([
     "agriculture_sciences",
@@ -22,16 +30,17 @@ const formSchema = z.object({
   ], { message: "Invalid faculty selection" })
 });
 
+
 type FormValues = z.infer<typeof formSchema>;
 
 type SignUpFormProps = {
   onSuccess?: () => void;
   user?: {
-    birthday: string;
-    firstName: string;
-    lastName: string;
+    name: string;
     email: string;
-    role: string;
+    mobile: string;
+    password: string;
+    faculty: string;
   };
 };
 
@@ -39,21 +48,31 @@ const SignUp: React.FC<SignUpFormProps> = ({ onSuccess, user }) => {
   const { register, setValue, handleSubmit, formState: { errors } } = useForm<FormValues>({
     defaultValues: user
       ? {
-          name: user.firstName + " " + user.lastName,
+          name: user.name,
           email: user.email,
           password: "",
+          mobile: "",
           faculty: "computing",
         }
       : undefined,
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit = (data: FormValues) => {
+  async function onSubmit(data: FormValues) {
     console.log(data);
+  try {
+    if (user) {
+      await axios.patch(`${API_BASE_URL}/students/add/`, data);
+    } else {
+      await axios.post(`${API_BASE_URL}/students/add`, data);
+    }
     if (onSuccess) {
       onSuccess();
     }
-  };
+  } catch (error) {
+    console.error('Error submitting the form:', error);
+  }
+}
 
   return (
     <>
@@ -79,7 +98,8 @@ const SignUp: React.FC<SignUpFormProps> = ({ onSuccess, user }) => {
                 <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
                   Sign Up to Eventsync
                 </h2>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={handleSubmit(onSubmit)} autoComplete="on">
+
                   <div className="mb-4">
                     <label className="mb-2.5 block font-medium text-black dark:text-white">
                       Name
@@ -117,20 +137,23 @@ const SignUp: React.FC<SignUpFormProps> = ({ onSuccess, user }) => {
                       </span>
                     </div>
                   </div>
+
                   <div className="mb-4">
-                    <label className="mb-2.5 block font-medium text-black dark:text-white">
+                    <label htmlFor='email' className="mb-2.5 block font-medium text-black dark:text-white">
                       Email
-                    </label>
+                      </label>
                     <div className="relative">
                       <input
                         type="email"
+                        id='email'
+                        autoComplete='new-password'
                         placeholder="Enter your email"
                         className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                         {...register("email")}
-                      />
+                        />
                       {errors.email && (
                         <p className="text-red-500 text-sm">{errors.email.message}</p>
-                      )}
+                        )}
                       <span className="absolute right-4 top-4">
                         <svg
                           className="fill-current"
@@ -144,12 +167,36 @@ const SignUp: React.FC<SignUpFormProps> = ({ onSuccess, user }) => {
                             <path
                               d="M19.2516 3.30005H2.75156C1.58281 3.30005 0.585938 4.26255 0.585938 5.46567V16.6032C0.585938 17.7719 1.54844 18.7688 2.75156 18.7688H19.2516C20.4203 18.7688 21.4172 17.8063 21.4172 16.6032V5.4313C21.4172 4.26255 20.4203 3.30005 19.2516 3.30005ZM19.2516 4.84692C19.2859 4.84692 19.3203 4.84692 19.3547 4.84692L11.0016 10.2113L2.68281 4.84692H19.2516ZM19.2516 17.222H2.75156C2.31641 17.222 1.93516 16.8408 1.93516 16.4057V6.64917L10.6625 12.0304C10.8 12.0988 10.9375 12.1332 11.075 12.1332C11.2125 12.1332 11.3833 12.0988 11.4852 12.0304L20.1797 6.64917V16.4057C20.2141 16.8408 19.8328 17.222 19.2516 17.222Z"
                               fill=""
-                            />
+                              />
                           </g>
                         </svg>
                       </span>
                     </div>
                   </div>
+
+                  <div className="mb-4">
+                    <label className="mb-2.5 block font-medium text-black dark:text-white">
+                      Mobile
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="phone"
+                        autoComplete='tel'
+                        placeholder="Enter your mobile number"
+                        className="appearance-none w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                        {...register("mobile")}
+                      />
+                      {errors.mobile && (
+                        <p className="text-red-500 text-sm">{errors.mobile.message}</p>
+                      )}
+                      <span className="absolute right-4 top-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" width={22} height={22} viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="opacity-50">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+                      </svg>
+                    </span>
+                    </div>
+                  </div>
+
                   <div className="mb-4">
                     <label className="mb-2.5 block font-medium text-black dark:text-white">
                       Password
@@ -187,6 +234,7 @@ const SignUp: React.FC<SignUpFormProps> = ({ onSuccess, user }) => {
                       </span>
                     </div>
                   </div>
+
                   <div className="mb-6">
                     <label className="mb-2.5 block font-medium text-black dark:text-white">
                       Faculty
@@ -230,6 +278,7 @@ const SignUp: React.FC<SignUpFormProps> = ({ onSuccess, user }) => {
                       </span>
                     </div>
                   </div>
+
                   <button
                     className="flex w-full justify-center rounded-lg bg-primary p-4 text-white transition hover:bg-opacity-90"
                     type="submit"

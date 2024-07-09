@@ -4,8 +4,6 @@ import axios from 'axios';
 
 import Loader from './common/Loader';
 import PageTitle from './components/PageTitle';
-import SignIn from './pages/Authentication/SignIn';
-import SignUp from './pages/Authentication/SignUp';
 import Calendar from './pages/Calendar';
 import Explore from './pages/Dashboard/Explore';
 import Settings from './pages/Settings';
@@ -14,7 +12,7 @@ import LandingPage from './pages/LandingPage';
 import Events from './pages/Events/Events';
 import Gifts from './pages/Gifts';
 
-const API_BASE_URL = "http://localhost:8000/";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -29,19 +27,21 @@ function App() {
     setTimeout(() => setLoading(false), 1000);
   }, []);
 
-  useEffect(() => {
-    const checkLoginStatus = async () => {
-      try {
-        const response = await axios.get(`${API_BASE_URL}Model/UserSession.php`);
-        setLogStatus(response.data.loggedin);
-      } catch (error) {
-        console.error('Error checking login status:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    checkLoginStatus();
-  }, []);
+  axios.defaults.withCredentials = true;
+
+  // useEffect(() => {
+  //   const checkLoginStatus = async () => {
+  //     try {
+  //       const response = await axios.get(`${API_BASE_URL}Model/UserSession.php`);
+  //       setLogStatus(response.data.loggedin);
+  //     } catch (error) {
+  //       console.error('Error checking login status:', error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   checkLoginStatus();
+  // }, []);
 
   if (loading) {
     return <Loader />;
