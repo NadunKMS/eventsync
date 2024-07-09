@@ -1,7 +1,7 @@
 {
-  "name": "tailadmin-react-free",
+  "name": "eventsync-frontend",
   "private": true,
-  "version": "1.3.7",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,14 +9,18 @@
     "preview": "vite preview"
   },
   "author": {
-    "name": "TailAdmin",
-    "email": "hello@tailadmin.com",
-    "url": "https://tailadmin.com"
+    "name": "nadun",
+    "email": "nadunkms@gmail.com",
+    "url": "https://nadun.tech"
   },
   "dependencies": {
     "@gsap/react": "^2.1.1",
+    "@headlessui/react": "^2.1.2",
+    "@heroicons/react": "^2.1.4",
+    "@hookform/resolvers": "^3.9.0",
     "apexcharts": "^3.41.0",
     "axios": "^1.7.2",
+    "clsx": "^2.1.1",
     "daisyui": "^4.12.10",
     "dotenv": "^16.4.5",
     "flatpickr": "^4.6.13",
@@ -28,13 +32,14 @@
     "react-apexcharts": "^1.4.1",
     "react-daisyui": "^5.0.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.52.1",
     "react-hot-toast": "^2.4.1",
     "react-icons": "^4.10.1",
     "react-router-dom": "^6.14.2",
     "react-toastify": "^9.1.3",
     "remove": "^0.1.5",
     "sort-by": "^0.0.2",
-    "split-type": "^0.3.4"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/react": "^18.2.17",

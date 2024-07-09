@@ -9,22 +9,12 @@ import PageTitle from '../components/PageTitle';
 
 function LandingPage() {
   useGSAP(() => {
-    gsap.fromTo("#navbar", {
-      y: -10,
-      opacity: 0,
-    }, {
-      duration: 2,
-      y: 0,
-      opacity: 1,
-      ease: "power2.out",
-    });
-  
     gsap.fromTo(".hero", {
       opacity: 0,
       y: 20,
     }, {
       opacity: 1,
-      duration: 1.5,
+      duration: 1,
       delay: 1,
       ease: "power3.out",
       stagger: 0.3,
