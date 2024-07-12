@@ -5,7 +5,12 @@ import UserDP from '../../images/user/default-male.svg';
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
+  const handleLogOut = () => {
+    localStorage.removeItem('jwt');
+    window.location.reload();
+  };
+  const userFullName = localStorage.getItem('full_name');
+  const userFaculty = localStorage.getItem('faculty');
   return (
     <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
       <Link
@@ -15,13 +20,19 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Thomas Anree
+            {userFullName}
           </span>
-          <span className="block text-xs">UX Designer</span>
+          <span className="block capitalize text-xs">
+            Faculty of {userFaculty}
+          </span>
         </span>
 
         <span className="h-12 w-12 rounded-full">
-          <img src={UserDP} alt="User" className='dark:bg-zinc-800 rounded-full' />
+          <img
+            src={UserDP}
+            alt="User"
+            className="dark:bg-zinc-800 rounded-full"
+          />
         </span>
 
         <svg
@@ -119,7 +130,10 @@ const DropdownUser = () => {
               </Link>
             </li> */}
           </ul>
-          <button className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+          <button
+            className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+            onClick={handleLogOut}
+          >
             <svg
               className="fill-current"
               width="22"

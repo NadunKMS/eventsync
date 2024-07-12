@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import Loader from './common/Loader';
@@ -16,7 +16,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
-  const [logStatus, setLogStatus] = useState(false)
+  const [logStatus, setLogStatus] = useState(false);
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -29,19 +29,15 @@ function App() {
 
   axios.defaults.withCredentials = true;
 
-  // useEffect(() => {
-  //   const checkLoginStatus = async () => {
-  //     try {
-  //       const response = await axios.get(`${API_BASE_URL}Model/UserSession.php`);
-  //       setLogStatus(response.data.loggedin);
-  //     } catch (error) {
-  //       console.error('Error checking login status:', error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   checkLoginStatus();
-  // }, []);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem('jwt');
+    if (storedToken) {
+      setLogStatus(true);
+      navigate('/');
+    }
+  }, [navigate]);
 
   if (loading) {
     return <Loader />;

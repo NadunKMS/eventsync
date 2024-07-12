@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import SignInImage from '../../images/vector/signin.svg';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -8,14 +8,15 @@ import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-
 const formSchema = z.object({
-  email: z.string()
-          .email({ message: "Invalid email address" })
-          .refine((email) => email.endsWith("@sab.ac.lk"),{message: "Invalid organization email. Only @sab.ac.lk emails are allowed"}),
-  password: z.string().min(6, { message: "Password required" }),
+  email: z
+    .string()
+    .email({ message: 'Invalid email address' })
+    .refine((email) => email.endsWith('@sab.ac.lk'), {
+      message: 'Invalid organization email. Only @sab.ac.lk emails are allowed',
+    }),
+  password: z.string().min(6, { message: 'Password required' }),
 });
-
 
 type FormValues = z.infer<typeof formSchema>;
 
@@ -28,58 +29,74 @@ type SignUpFormProps = {
 };
 
 const SignIn: React.FC<SignUpFormProps> = ({ onSuccess, user }) => {
-  const { register, setValue, handleSubmit, formState: { errors } } = useForm<FormValues>({
+  const {
+    register,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({
     defaultValues: user
       ? {
           email: user.email,
-          password: "",
+          password: '',
         }
       : undefined,
     resolver: zodResolver(formSchema),
   });
 
+  const navigate = useNavigate();
+
   async function onSubmit(data: FormValues) {
     console.log(data);
-  try {
-      await axios.post(`${API_BASE_URL}/login`, data);
-    if (onSuccess) {
-      onSuccess();
+    try {
+      const response = await axios.post(`${API_BASE_URL}/users/login`, data);
+      const userData = response.data.logindata.user;
+      const token = response.data.logindata.token;
+      localStorage.setItem('jwt', token);
+      Object.keys(userData).forEach((key) => {
+        localStorage.setItem(key, userData[key]);
+      });
+      navigate('/');
+      if (onSuccess) {
+        onSuccess();
+      }
+    } catch (error) {
+      console.error('Error submitting the form:', error);
     }
-  } catch (error) {
-    console.error('Error submitting the form:', error);
   }
-}
 
   return (
     <>
-      <div className='h-screen flex justify-center items-center'>
+      <div className="h-screen flex justify-center items-center">
         <div className="rounded-md border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark my-2">
           <div className="flex flex-wrap items-center">
             <div className="hidden w-full xl:block xl:w-1/2">
               <div className="py-17.5 px-26 text-center">
                 <Link className="mb-5.5 inline-block" to="/">
-                  <h2 className='text-4xl font-bold'>EventSync</h2>
+                  <h2 className="text-4xl font-bold">EventSync</h2>
                 </Link>
-  
+
                 <p className="2xl:px-20">
-                  Access your event management tools effortlessly with just a few clicks.
+                  Access your event management tools effortlessly with just a
+                  few clicks.
                 </p>
-  
+
                 <span className="mt-15 inline-block">
                   <img src={SignInImage} alt="sign in image" />
                 </span>
               </div>
             </div>
-  
+
             <div className="w-full border-stroke dark:border-strokedark xl:w-1/2 xl:border-l-2">
               <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
-               <span className="mb-1.5 block font-medium">One more step to browse events</span>
+                <span className="mb-1.5 block font-medium">
+                  One more step to browse events
+                </span>
                 <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
                   Sign In to EventSync
                 </h2>
-  
-                <form onSubmit={handleSubmit(onSubmit)} autoComplete="on">
 
+                <form onSubmit={handleSubmit(onSubmit)} autoComplete="on">
                   <div className="mb-4">
                     <label className="mb-2.5 block font-medium text-black dark:text-white">
                       Email
@@ -90,10 +107,12 @@ const SignIn: React.FC<SignUpFormProps> = ({ onSuccess, user }) => {
                         autoComplete="email"
                         placeholder="Enter your email"
                         className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                        {...register("email")}
+                        {...register('email')}
                       />
                       {errors.email && (
-                        <p className="text-red-500 text-sm">{errors.email.message}</p>
+                        <p className="text-red-500 text-sm">
+                          {errors.email.message}
+                        </p>
                       )}
                       <span className="absolute right-4 top-4">
                         <svg
@@ -114,9 +133,7 @@ const SignIn: React.FC<SignUpFormProps> = ({ onSuccess, user }) => {
                       </span>
                     </div>
                   </div>
-                    
-                  
-  
+
                   <div className="mb-4">
                     <label className="mb-2.5 block font-medium text-black dark:text-white">
                       Password
@@ -124,13 +141,15 @@ const SignIn: React.FC<SignUpFormProps> = ({ onSuccess, user }) => {
                     <div className="relative">
                       <input
                         type="password"
-                        autoComplete='current-password'
+                        autoComplete="current-password"
                         placeholder="Enter your password"
                         className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                        {...register("password")}
+                        {...register('password')}
                       />
                       {errors.password && (
-                        <p className="text-red-500 text-sm">{errors.password.message}</p>
+                        <p className="text-red-500 text-sm">
+                          {errors.password.message}
+                        </p>
                       )}
                       <span className="absolute right-4 top-4">
                         <svg
@@ -155,7 +174,7 @@ const SignIn: React.FC<SignUpFormProps> = ({ onSuccess, user }) => {
                       </span>
                     </div>
                   </div>
-  
+
                   <div className="mb-5">
                     <input
                       type="submit"
@@ -163,7 +182,7 @@ const SignIn: React.FC<SignUpFormProps> = ({ onSuccess, user }) => {
                       className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
                     />
                   </div>
-  
+
                   <div className="mt-6 text-center">
                     <p>
                       Don’t have any account?{' '}
@@ -177,7 +196,7 @@ const SignIn: React.FC<SignUpFormProps> = ({ onSuccess, user }) => {
             </div>
           </div>
         </div>
-</div>
+      </div>
     </>
   );
 };
