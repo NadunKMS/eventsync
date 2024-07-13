@@ -46,6 +46,9 @@ const SignIn: React.FC<SignUpFormProps> = ({ onSuccess, user }) => {
 
   const navigate = useNavigate();
 
+  axios.defaults.withCredentials = true
+
+
   async function onSubmit(data: FormValues) {
     console.log(data);
     try {
