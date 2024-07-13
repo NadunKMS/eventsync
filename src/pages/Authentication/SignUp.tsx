@@ -7,6 +7,7 @@ import { z } from 'zod';
 import SignUpImage from '../../images/vector/signup.svg';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+console.log(API_BASE_URL);
 
 const lkMobile = /^(?:0|94)?(7[0-9]{8})$/;
 

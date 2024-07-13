@@ -6,7 +6,10 @@ import UserDP from '../../images/user/default-male.svg';
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const handleLogOut = () => {
-    localStorage.removeItem('jwt');
+    Object.keys(localStorage).forEach((key) => {
+      localStorage.removeItem(key);
+    });
+    sessionStorage.clear();
     window.location.reload();
   };
   const userFullName = localStorage.getItem('full_name');
