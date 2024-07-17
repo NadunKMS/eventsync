@@ -46,13 +46,12 @@ const SignIn: React.FC<SignUpFormProps> = ({ onSuccess, user }) => {
 
   const navigate = useNavigate();
 
-  axios.defaults.withCredentials = true
-
-
   async function onSubmit(data: FormValues) {
     console.log(data);
     try {
-      const response = await axios.post(`${API_BASE_URL}/users/login`, data);
+      const response = await axios.post(`${API_BASE_URL}/users/login`, data, {
+        withCredentials: true,
+      });
       const userData = response.data.logindata.user;
       const token = response.data.logindata.token;
       localStorage.setItem('jwt', token);

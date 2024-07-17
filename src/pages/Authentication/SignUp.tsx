@@ -75,15 +75,20 @@ const SignUp: React.FC<SignUpFormProps> = ({ onSuccess, user }) => {
 
   const navigate = useNavigate();
 
-  axios.defaults.withCredentials = true
-
   async function onSubmit(data: FormValues) {
     console.log(data);
     try {
       if (user) {
         await axios.patch(`${API_BASE_URL}/users/signup/`, data);
       } else {
-        const response = await axios.post(`${API_BASE_URL}/users/signup`, data);
+        // const response = await axios.post(`${API_BASE_URL}/users/signup`, data);
+        const response = await axios.post(
+          `${API_BASE_URL}/users/signup`,
+          data,
+          {
+            withCredentials: true,
+          },
+        );
         //console.log(response.data.signupdata.user);
         const userData = response.data.signupdata.user;
         if (!response.data.signupdata.email) {
